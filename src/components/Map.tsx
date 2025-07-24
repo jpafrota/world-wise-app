@@ -1,34 +1,50 @@
-import { useNavigate, useSearchParams } from "react-router";
+import { LatLngExpression } from "leaflet";
+import { useEffect, useState } from "react";
+import { MapContainer, Marker, Popup, TileLayer, useMap } from "react-leaflet";
+import { useSearchParams } from "react-router";
+import { useCities } from "../context/useCities";
 import styles from "./Map.module.css";
-import Sidebar from "./Sidebar";
-import Button from "./Button";
 
 function Map() {
-  const [searchParams, setSearchParams] = useSearchParams();
-  const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
+  const [mapPosition, setMapPosition] = useState<LatLngExpression>([0, 40]);
+  const { cities } = useCities();
 
-  const lat = searchParams.get("lat");
-  const lng = searchParams.get("lng");
+  const mapLat = searchParams.get("lat");
+  const mapLng = searchParams.get("lng");
 
-  function handleClick() {
-    setSearchParams({ lat: "23", lng: "50" });
-  }
+  useEffect(() => {
+    if (!mapLat || !mapLng) return;
+
+    setMapPosition([Number(mapLat), Number(mapLng)]);
+  }, [mapLat, mapLng]);
 
   return (
-    <div
-      className={styles.mapContainer}
-      onClick={() => {
-        navigate("form");
-      }}>
-      <h1>Map</h1>
-      <h1>
-        Position: {lat}, {lng}
-      </h1>
-      <Button onClick={handleClick} type="position">
-        Change pos
-      </Button>
+    <div className={styles.mapContainer}>
+      <MapContainer className={styles.map} center={mapPosition} zoom={6}>
+        <TileLayer
+          attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+          url="https://{s}.tile.openstreetmap.fr/hot/{z}/{x}/{y}.png"
+        />
+        {cities.map((city) => (
+          <Marker key={city.id} position={city.position}>
+            <Popup>
+              <span>{city.emoji}</span> <span>{city.cityName}</span>
+            </Popup>
+          </Marker>
+        ))}
+        <ChangeCity position={mapPosition}></ChangeCity>
+      </MapContainer>
     </div>
   );
+}
+
+function ChangeCity({ position }) {
+  const map = useMap();
+
+  map.setView(position);
+
+  return null;
 }
 
 export default Map;

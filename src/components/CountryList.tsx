@@ -1,3 +1,4 @@
+import { useCities } from "../context/useCities";
 import CountryItem from "./CountryItem";
 import styles from "./CountryList.module.css";
 import Spinner from "./Spinner";
@@ -12,12 +13,9 @@ type City = {
   emoji: string;
 };
 
-type CountryListProps = {
-  cities: City[];
-  isLoading: boolean;
-};
+function CountryList() {
+  const { cities, isLoading } = useCities();
 
-function CountryList({ cities, isLoading }: CountryListProps) {
   if (isLoading) return <Spinner />;
 
   // this is very time efficient. O(n) time complexity.
