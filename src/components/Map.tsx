@@ -8,15 +8,15 @@ import {
   useMap,
   useMapEvents,
 } from "react-leaflet";
-import { useNavigate, useSearchParams } from "react-router";
+import { useNavigate } from "react-router";
 import { useCities } from "../context/useCities";
-import styles from "./Map.module.css";
 import { useGeolocation } from "../hooks/useGeolocation";
+import { useURLPosition } from "../hooks/useURLPosition";
 import Button from "./Button";
+import styles from "./Map.module.css";
 
 function Map() {
   const { cities } = useCities();
-  const [searchParams] = useSearchParams();
   const [mapPosition, setMapPosition] = useState<LatLngExpression>([0, 40]);
   const {
     position: geoLocationPosition,
@@ -24,18 +24,16 @@ function Map() {
     isLoading: isGeoLocationLoading,
     error,
   } = useGeolocation();
-
-  const mapLat = searchParams.get("lat");
-  const mapLng = searchParams.get("lng");
+  const [urlLat, urlLng] = useURLPosition();
 
   useEffect(() => {
     // if there is not lat and lng values in the URL params,
     // prevent app from re-positioning the map.
     // instead, change position only if new values are provided.
-    if (!mapLat || !mapLng) return;
+    if (!urlLat || !urlLng) return;
 
-    setMapPosition([Number(mapLat), Number(mapLng)]);
-  }, [mapLat, mapLng]);
+    setMapPosition([Number(urlLat), Number(urlLng)]);
+  }, [urlLat, urlLng]);
 
   useEffect(() => {
     if (!geoLocationPosition) return;
@@ -44,9 +42,12 @@ function Map() {
 
   return (
     <div className={styles.mapContainer}>
-      {geoLocationPosition !== mapPosition && <Button type="position" onClick={getGeoLocation}>
-        {isGeoLocationLoading ? "Loading..." : "Use your position"}
-      </Button>}
+      {geoLocationPosition !== mapPosition && (
+        <Button type="position" onClick={getGeoLocation}>
+          {isGeoLocationLoading ? "Loading..." : "Use your position"}
+        </Button>
+      )}
+
       <MapContainer className={styles.map} center={mapPosition} zoom={6}>
         <TileLayer
           attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
@@ -76,8 +77,6 @@ function OnMapCLick() {
   useMapEvents({
     click(e) {
       navigate(`form?lat=${e.latlng.lat}&lng=${e.latlng.lng}`);
-      console.log(e);
-      console.log("this will open the form");
     },
   });
 
