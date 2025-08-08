@@ -9,6 +9,7 @@ const CitiesContext = createContext<
       currentCity: any;
       getCity: (id: string) => void;
       createCity: (city: any) => Promise<void>;
+      deleteCity: (id: string) => Promise<void>;
     }
   | undefined
 >(undefined);
@@ -64,13 +65,36 @@ function CitiesProvider({ children }) {
     }
   }
 
+  async function deleteCity(id: string) {
+    try {
+      setIsLoading(true);
+      const res = await fetch(`${BASE_URL}/cities/${id}`, {
+        method: "DELETE",
+      });
+      const data = await res.json();
+      return data;
+    } catch (error) {
+      console.error("Failed to delete city: ", error);
+    } finally {
+      setIsLoading(false);
+      await fetchCities();
+    }
+  }
+
   useEffect(() => {
     fetchCities();
   }, []);
 
   return (
     <CitiesContext.Provider
-      value={{ isLoading, cities, currentCity, getCity, createCity }}>
+      value={{
+        isLoading,
+        cities,
+        currentCity,
+        getCity,
+        createCity,
+        deleteCity,
+      }}>
       {children}
     </CitiesContext.Provider>
   );

@@ -15,11 +15,6 @@ const formatDate = (date) =>
 
 function City() {
   const { id } = useParams();
-
-  const [searchParams] = useSearchParams();
-  const lat = searchParams.get("lat");
-  const lng = searchParams.get("lng");
-
   const { getCity, currentCity, isLoading } = useCities();
 
   useEffect(() => {
@@ -34,6 +29,11 @@ function City() {
     getCity(id);
 
     // for some reason we will not add getCity to the dep array now
+    // spotted... when we get a new city, it will update the URL params
+    // because of the `CityItem.tsx` component.
+    // it will cause the "id" to change and re-run getCity,
+    // then stay in this loop forever.
+    // how to solve that? well... don't know.
   }, [id]);
 
   const { cityName, emoji, date, notes } = currentCity;
