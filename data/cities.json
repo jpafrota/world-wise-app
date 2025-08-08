@@ -35,6 +35,78 @@
         "lng": 13.376933665713324
       },
       "id": 98443197
+    },
+    {
+      "id": "ed3d",
+      "cityName": "Liben",
+      "country": "Ethiopia",
+      "emoji": "🇪🇹",
+      "date": "2025-08-08T03:20:02.230Z",
+      "notes": "sdfsdfd",
+      "position": {
+        "lat": "5.506639674354886",
+        "lng": "39.68261718750001"
+      }
+    },
+    {
+      "id": "0a96",
+      "cityName": "Amigna",
+      "country": "Ethiopia",
+      "emoji": "🇪🇹",
+      "date": "2025-08-08T03:20:07.882Z",
+      "notes": "aaa",
+      "position": {
+        "lat": "7.9504368350293735",
+        "lng": "40.14404296875"
+      }
+    },
+    {
+      "id": "9a7f",
+      "cityName": "Manaus",
+      "country": "Brazil",
+      "emoji": "🇧🇷",
+      "date": "2025-08-08T03:20:13.495Z",
+      "notes": "MINHA CIDADEEEE",
+      "position": {
+        "lat": "-2.767477951092084",
+        "lng": "-60.33691406250001"
+      }
+    },
+    {
+      "id": "dc52",
+      "cityName": "Juba",
+      "country": "South Sudan",
+      "emoji": "🇸🇸",
+      "date": "2025-08-08T03:25:59.351Z",
+      "notes": "fdsf",
+      "position": {
+        "lat": "4.981505049328246",
+        "lng": "31.574707031250004"
+      }
+    },
+    {
+      "id": "27c9",
+      "cityName": "Mena",
+      "country": "Ethiopia",
+      "emoji": "🇪🇹",
+      "date": "2025-08-08T03:26:35.933Z",
+      "notes": "fdsfsd",
+      "position": {
+        "lat": "6.337137394988546",
+        "lng": "40.12207031250001"
+      }
+    },
+    {
+      "id": "c8fc",
+      "cityName": "Ad Dawadimi",
+      "country": "Saudi Arabia",
+      "emoji": "🇸🇦",
+      "date": "2025-08-20T03:30:45.000Z",
+      "notes": "KJSNDKJFASDKJLFAKJNSDF",
+      "position": {
+        "lat": "24.016746043083504",
+        "lng": "44.29979365973283"
+      }
     }
   ]
 }

@@ -1,10 +1,4 @@
-import {
-  createContext,
-  Dispatch,
-  SetStateAction,
-  useEffect,
-  useState,
-} from "react";
+import { createContext, useEffect, useState } from "react";
 
 const BASE_URL = "http://localhost:8001";
 
@@ -14,6 +8,7 @@ const CitiesContext = createContext<
       isLoading: boolean;
       currentCity: any;
       getCity: (id: string) => void;
+      createCity: (city: any) => Promise<void>;
     }
   | undefined
 >(undefined);
@@ -23,22 +18,18 @@ function CitiesProvider({ children }) {
   const [currentCity, setCurrentCity] = useState({});
   const [isLoading, setIsLoading] = useState(false);
 
-  useEffect(() => {
-    async function fetchCities() {
-      try {
-        setIsLoading(true);
-        const res = await fetch(`${BASE_URL}/cities`);
-        const data = await res.json();
-        setCities(data);
-      } catch (error) {
-        console.error("Failed to fetch cities: ", error);
-      } finally {
-        setIsLoading(false);
-      }
+  async function fetchCities() {
+    try {
+      setIsLoading(true);
+      const res = await fetch(`${BASE_URL}/cities`);
+      const data = await res.json();
+      setCities(data);
+    } catch (error) {
+      console.error("Failed to fetch cities: ", error);
+    } finally {
+      setIsLoading(false);
     }
-
-    fetchCities();
-  }, []);
+  }
 
   async function getCity(id: string) {
     try {
@@ -53,11 +44,36 @@ function CitiesProvider({ children }) {
     }
   }
 
+  async function createCity(city: any) {
+    try {
+      setIsLoading(true);
+      const res = await fetch(`${BASE_URL}/cities`, {
+        method: "POST",
+        body: JSON.stringify(city),
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+      const data = await res.json();
+      return data;
+    } catch (error) {
+      console.error("Failed to insert data: ", error);
+    } finally {
+      setIsLoading(false);
+      await fetchCities();
+    }
+  }
+
+  useEffect(() => {
+    fetchCities();
+  }, []);
+
   return (
-    <CitiesContext.Provider value={{ isLoading, cities, currentCity, getCity }}>
+    <CitiesContext.Provider
+      value={{ isLoading, cities, currentCity, getCity, createCity }}>
       {children}
     </CitiesContext.Provider>
   );
 }
 
-export { CitiesProvider, CitiesContext };
+export { CitiesContext, CitiesProvider };

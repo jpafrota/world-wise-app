@@ -1,7 +1,6 @@
 // "https://api.bigdatacloud.net/data/reverse-geocode-client?latitude=0&longitude=0"
-
 import { useEffect, useState } from "react";
-
+import DatePicker from "react-datepicker";
 import { useURLPosition } from "../hooks/useURLPosition";
 import { convertToEmoji } from "../utils/convertToEmoji";
 import BackButton from "./BackButton";
@@ -10,25 +9,55 @@ import styles from "./Form.module.css";
 import Message from "./Message";
 import Spinner from "./Spinner";
 
+import "react-datepicker/dist/react-datepicker.css";
+import { useCities } from "../context/useCities";
+import { useNavigate } from "react-router";
+
 const BASE_URL = "https://api.bigdatacloud.net/data/reverse-geocode-client";
 
 function Form() {
+  const navigate = useNavigate();
+  const { createCity, isLoading } = useCities();
   const [cityName, setCityName] = useState("");
   const [country, setCountry] = useState("");
-  const [date, setDate] = useState(new Date());
+  const [date, setDate] = useState<Date | undefined>(new Date());
   const [notes, setNotes] = useState("");
   const [emoji, setEmoji] = useState("");
   const [error, setError] = useState("");
-  const [urlLat, urlLng] = useURLPosition();
+  const [lat, lng] = useURLPosition();
+
+  // geoLocation != geoCoding
+  // geoLocation: current user position
+  // geoCoding: get place information such as citiName from lat/lng values
+
   const [isGeocodingLoading, setIsGeocodingLoading] = useState(true);
+
+  // TODO: how to automatically update the form when the user
+  // requests geoLocation?
+
+  async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
+    e.preventDefault();
+
+    if (!cityName || !date) return;
+
+    const city = {
+      cityName,
+      country,
+      emoji,
+      date,
+      notes,
+      position: { lat, lng },
+    };
+
+    await createCity(city);
+    navigate("/app/cities");
+  }
 
   useEffect(() => {
     async function getCityData() {
       try {
         setIsGeocodingLoading(true);
-        const res = await fetch(
-          `${BASE_URL}?latitude=${urlLat}&longitude=${urlLng}`
-        );
+        const res = await fetch(`${BASE_URL}?latitude=${lat}&longitude=${lng}`);
         const data = await res.json();
 
         if (!data.countryCode) {
@@ -48,12 +77,12 @@ function Form() {
       }
     }
 
-    if (!urlLat || !urlLng) return;
+    if (!lat || !lng) return;
 
     getCityData();
-  }, [urlLat, urlLng]);
+  }, [lat, lng]);
 
-  if (!urlLat || !urlLng)
+  if (!lat || !lng)
     return <Message message={"Start by clicking somewhere on the map!"} />;
 
   if (isGeocodingLoading) return <Spinner />;
@@ -61,7 +90,9 @@ function Form() {
   if (error) return <Message message={error}></Message>;
 
   return (
-    <form className={styles.form}>
+    <form
+      className={`${styles.form} ${isLoading ? styles.loading : ""}`}
+      onSubmit={handleSubmit}>
       <div className={styles.row}>
         <label htmlFor="cityName">City name</label>
         <input
@@ -74,10 +105,12 @@ function Form() {
 
       <div className={styles.row}>
         <label htmlFor="date">When did you go to {cityName}?</label>
-        <input
-          id="date"
-          onChange={(e) => setDate(new Date(e.target.value))}
-          value={date.toString()}
+        <DatePicker
+          selected={date}
+          dateFormat={"dd/MM/YYYY"}
+          onChange={(date) => {
+            setDate(date ?? undefined);
+          }}
         />
       </div>
 
@@ -91,10 +124,10 @@ function Form() {
       </div>
 
       <div className={styles.buttons}>
+        <BackButton />
         <Button type="primary" onClick={() => {}}>
           Add
         </Button>
-        <BackButton />
       </div>
     </form>
   );
