@@ -1,3 +1,4 @@
+import { useCities } from "@/context/useCities";
 import { LatLngExpression } from "leaflet";
 import { useEffect, useState } from "react";
 import {
@@ -9,10 +10,9 @@ import {
   useMapEvents,
 } from "react-leaflet";
 import { useNavigate } from "react-router";
-import { useCities } from "../context/useCities";
-import { useGeolocation } from "../hooks/useGeolocation";
-import { useURLPosition } from "../hooks/useURLPosition";
-import Button from "./Button";
+import { useGeolocation } from "@/hooks/useGeolocation";
+import { useURLPosition } from "@/hooks/useURLPosition";
+import Button from "@/components/Button/Button";
 import styles from "./Map.module.css";
 
 function Map() {

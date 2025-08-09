@@ -1,7 +1,7 @@
 import { Link } from "react-router";
-import { RoutesPath } from "../routes/routes";
+import { RoutesPath } from "../../routes/routes";
 import styles from "./Homepage.module.css";
-import PageNav from "../components/PageNav";
+import PageNav from "@/components/PageNav/PageNav";
 
 export default function Homepage() {
   return (

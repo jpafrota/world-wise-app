@@ -1,7 +1,7 @@
-import { useCities } from "../context/useCities";
-import CountryItem from "./CountryItem";
+import { useCities } from "@/context/useCities";
+import CountryItem from "@/components/CountryItem/CountryItem";
 import styles from "./CountryList.module.css";
-import Spinner from "./Spinner";
+import Spinner from "../Spinner/Spinner";
 
 type Country = {
   country: string;

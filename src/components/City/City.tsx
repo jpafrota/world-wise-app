@@ -1,9 +1,9 @@
+import BackButton from "@/components/BackButton/BackButton";
+import Spinner from "@/components/Spinner/Spinner";
+import { useCities } from "@/context/useCities";
 import { useEffect } from "react";
-import { useParams, useSearchParams } from "react-router";
-import { useCities } from "../context/useCities";
-import BackButton from "./BackButton";
+import { useParams } from "react-router";
 import styles from "./City.module.css";
-import Spinner from "./Spinner";
 
 const formatDate = (date) =>
   new Intl.DateTimeFormat("en", {
@@ -33,7 +33,7 @@ function City() {
     // because of the `CityItem.tsx` component.
     // it will cause the "id" to change and re-run getCity,
     // then stay in this loop forever.
-    // how to solve that? well... don't know.
+    // how to solve that? well... don't know yet!
   }, [id]);
 
   const { cityName, emoji, date, notes } = currentCity;

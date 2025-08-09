@@ -1,4 +1,4 @@
-import { createContext, useEffect, useReducer, useState } from "react";
+import { createContext, useEffect, useReducer } from "react";
 
 const BASE_URL = "http://localhost:8001";
 
@@ -104,7 +104,7 @@ function CitiesProvider({ children }) {
           "Content-Type": "application/json",
         },
       });
-      dispatch({ type: "city/created" });
+      dispatch({ type: "city/created", payload: city });
 
       await fetchCities();
     } catch (error) {

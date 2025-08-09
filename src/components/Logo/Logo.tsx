@@ -1,6 +1,6 @@
 import { Link } from "react-router";
 import styles from "./Logo.module.css";
-import { RoutesPath } from "../routes/routes";
+import { RoutesPath } from "../../routes/routes";
 
 function Logo() {
   return (
