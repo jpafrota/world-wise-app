@@ -24,7 +24,9 @@ function Form() {
   const [notes, setNotes] = useState("");
   const [emoji, setEmoji] = useState("");
   const [error, setError] = useState("");
-  const [lat, lng] = useURLPosition();
+  const {
+    position: [lat, lng],
+  } = useURLPosition();
 
   // geoLocation != geoCoding
   // geoLocation: current user position

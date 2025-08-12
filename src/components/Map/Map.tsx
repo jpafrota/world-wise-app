@@ -1,4 +1,7 @@
+import Button from "@/components/Button/Button";
 import { useCities } from "@/context/useCities";
+import { useGeolocation } from "@/hooks/useGeolocation";
+import { useURLPosition } from "@/hooks/useURLPosition";
 import { LatLngExpression } from "leaflet";
 import { useEffect, useState } from "react";
 import {
@@ -10,9 +13,6 @@ import {
   useMapEvents,
 } from "react-leaflet";
 import { useNavigate } from "react-router";
-import { useGeolocation } from "@/hooks/useGeolocation";
-import { useURLPosition } from "@/hooks/useURLPosition";
-import Button from "@/components/Button/Button";
 import styles from "./Map.module.css";
 
 function Map() {
@@ -24,20 +24,31 @@ function Map() {
     isLoading: isGeoLocationLoading,
     error,
   } = useGeolocation();
-  const [urlLat, urlLng] = useURLPosition();
+  const {
+    position: [urlLat, urlLng],
+    setURLPosition,
+  } = useURLPosition();
 
   useEffect(() => {
-    // if there is not lat and lng values in the URL params,
-    // prevent app from re-positioning the map.
-    // instead, change position only if new values are provided.
     if (!urlLat || !urlLng) return;
-
     setMapPosition([Number(urlLat), Number(urlLng)]);
   }, [urlLat, urlLng]);
 
   useEffect(() => {
-    if (!geoLocationPosition) return;
-    setMapPosition(geoLocationPosition);
+    if (!geoLocationPosition || !setURLPosition) return;
+
+    setURLPosition({
+      lat: geoLocationPosition.lat + "",
+      lng: geoLocationPosition.lng + "",
+    });
+
+    /** -----------------------------------------------------
+     * Be careful down here. The only dependency that should 
+     * actually be ignored is `setURLPosition`, because 
+     * of a known bug in react-router's `setURLParams` method:
+     * https://github.com/remix-run/react-router/issues/9991
+     --------------------------------------------------------*/
+    /* eslint-disable-next-line react-hooks/exhaustive-deps */
   }, [geoLocationPosition]);
 
   return (
