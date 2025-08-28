@@ -12,12 +12,19 @@ import CityList from "./components/CityList/CityList";
 import CountryList from "./components/CountryList/CountryList";
 import City from "./components/City/City";
 import Form from "./components/Form/Form";
+import { ProtectedRoute } from "@/components/ProtectedRoute/ProtectedRoute";
 
 function App() {
   return (
     <BrowserRouter>
       <Routes>
-        <Route path={RoutesPath.App} element={<AppLayout />}>
+        <Route
+          path={RoutesPath.App}
+          element={
+            <ProtectedRoute>
+              <AppLayout />
+            </ProtectedRoute>
+          }>
           {/* An index route is matched if none of the children matches. */}
           <Route index element={<Navigate replace to={RoutesPath.Cities} />} />
           <Route path={RoutesPath.Cities} element={<CityList />} />
