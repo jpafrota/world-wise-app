@@ -18,6 +18,7 @@ import styles from "./Map.module.css";
 function Map() {
   const { cities } = useCities();
   const [mapPosition, setMapPosition] = useState<LatLngExpression>([0, 40]);
+
   const {
     position: geoLocationPosition,
     getPosition: getGeoLocation,
@@ -35,7 +36,7 @@ function Map() {
   }, [urlLat, urlLng]);
 
   useEffect(() => {
-    if (!geoLocationPosition || !setURLPosition) return;
+    if (!geoLocationPosition) return;
 
     setURLPosition({
       lat: geoLocationPosition.lat + "",
@@ -72,10 +73,12 @@ function Map() {
           </Marker>
         ))}
 
-        {/* react leaflet uses inner components to enable the imperative APIs of the map, 
-        such as event listeners, going to another position, getting current location, etc!
-        
-        by default, map props are immutable if its children don´t change/re-render.*/}
+        {/* 
+          react leaflet uses inner components to enable the imperative APIs of the map, 
+          such as event listeners, going to another position, getting current location, etc!
+          
+          by default, map props are immutable if its children don´t change/re-render.
+        */}
         <OnMapCLick />
         <ChangeCity position={mapPosition} />
       </MapContainer>
