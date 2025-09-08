@@ -28,13 +28,10 @@ function City() {
     // to avoid that, we simply add a loading state.
     getCity(id);
 
-    // for some reason we will not add getCity to the dep array now
-    // spotted... when we get a new city, it will update the URL params
-    // because of the `CityItem.tsx` component.
-    // it will cause the "id" to change and re-run getCity,
-    // then stay in this loop forever.
-    // how to solve that? well... don't know yet!
-  }, [id]);
+    // getCity updates the id state but it also triggers a re-render
+    // in the Context. in order to solve that, we need to memoize the getCity
+    // function so it does not get recreated when Context renders.
+  }, [id, getCity]);
 
   const { cityName, emoji, date, notes } = currentCity;
 

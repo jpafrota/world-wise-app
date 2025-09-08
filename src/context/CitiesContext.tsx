@@ -1,4 +1,4 @@
-import { createContext, useEffect, useReducer } from "react";
+import { createContext, useCallback, useEffect, useReducer } from "react";
 
 const BASE_URL = "http://localhost:8001";
 
@@ -80,19 +80,36 @@ function CitiesProvider({ children }) {
     }
   }
 
-  async function getCity(id: string) {
-    if (id === currentCity.id) return;
+  // async function getCity(id: string) {
+  //   if (id === currentCity.id) return;
 
-    dispatch({ type: "loading" });
-    try {
-      const res = await fetch(`${BASE_URL}/cities/${id}`);
-      const data = await res.json();
-      dispatch({ type: "city/loaded", payload: data });
-    } catch (error) {
-      console.error("Failed to get city: ", error);
-      dispatch({ type: "error", payload: "Failed to get city: " });
-    }
-  }
+  //   dispatch({ type: "loading" });
+  //   try {
+  //     const res = await fetch(`${BASE_URL}/cities/${id}`);
+  //     const data = await res.json();
+  //     dispatch({ type: "city/loaded", payload: data });
+  //   } catch (error) {
+  //     console.error("Failed to get city: ", error);
+  //     dispatch({ type: "error", payload: "Failed to get city: " });
+  //   }
+  // }
+
+  const getCity = useCallback(
+    async function getCity(id: string) {
+      if (id === currentCity.id) return;
+
+      dispatch({ type: "loading" });
+      try {
+        const res = await fetch(`${BASE_URL}/cities/${id}`);
+        const data = await res.json();
+        dispatch({ type: "city/loaded", payload: data });
+      } catch (error) {
+        console.error("Failed to get city: ", error);
+        dispatch({ type: "error", payload: "Failed to get city: " });
+      }
+    },
+    [currentCity.id]
+  );
 
   async function createCity(city: any) {
     dispatch({ type: "loading" });

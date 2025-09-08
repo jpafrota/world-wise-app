@@ -1,18 +1,6 @@
 {
   "cities": [
     {
-      "cityName": "Lisbon",
-      "country": "Portugal",
-      "emoji": "🇵🇹",
-      "date": "2027-10-31T15:59:59.138Z",
-      "notes": "My favorite city so far!",
-      "position": {
-        "lat": 38.727881642324164,
-        "lng": -9.140900099907554
-      },
-      "id": 73930385
-    },
-    {
       "cityName": "Madrid",
       "country": "Spain",
       "emoji": "🇪🇸",
@@ -22,7 +10,7 @@
         "lat": 40.46635901755316,
         "lng": -3.7133789062500004
       },
-      "id": 17806751
+      "id": "17806751"
     },
     {
       "cityName": "Berlin",
@@ -34,7 +22,7 @@
         "lat": 52.53586782505711,
         "lng": 13.376933665713324
       },
-      "id": 98443197
+      "id": "98443197"
     },
     {
       "id": "ed3d",
@@ -106,6 +94,18 @@
       "position": {
         "lat": "24.016746043083504",
         "lng": "44.29979365973283"
+      }
+    },
+    {
+      "id": "2197",
+      "cityName": "Mambasa",
+      "country": "Congo (the Democratic Republic of the)",
+      "emoji": "🇨🇩",
+      "date": "2025-09-08T01:49:42.195Z",
+      "notes": "2",
+      "position": {
+        "lat": "1.3841426927920155",
+        "lng": "28.762207031250004"
       }
     }
   ]
